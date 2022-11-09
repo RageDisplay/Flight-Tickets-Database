@@ -2,6 +2,9 @@
 #include <fstream>
 #include <string>
 #include <cstdlib>
+#include <string>
+#include <cctype>
+#include <algorithm>
 //#include <locale.h>
 //#include <clocale>
 //#include <Windows.h>
@@ -16,6 +19,7 @@ public:
     string getFlightNumById(int id);
     string getDateById(int id);
     string getTimeById(int id);
+
     int getCount();
     void save();
     void load();
@@ -34,14 +38,13 @@ protected:
  
 void  Database::editRecord(int id, string name, string lastname, string flightnum, string date, string time)
 {
- 
     this->name[id] = name;
     this->lastname[id] = lastname;
     this->flightnum[id] = flightnum;
     this->date[id]=date;
     this->time[id]=time;
 }
- 
+
 int Database::getCount()
 {
     return count;
@@ -79,6 +82,7 @@ string Database::getTimeById(int id)
 {
     return time[id];
 }
+
 void  Database::save()
 {
     ofstream output;
@@ -129,7 +133,9 @@ void  Database::load()
         input >> time;
         
         if(name != "")
+        {
             addRecord(name,lastname,flightnum,date,time);
+        }
     }
  
     input.close();
@@ -139,7 +145,9 @@ void  Database::load()
 void Database::printDatabase()
 {
     for(int i=0; i < count; ++i)
+    {
         cout << i << "." << getNameById(i) << " " << getLastNameById(i) << " "<< getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << endl;
+    }
 }
 
 void Database::search()
@@ -155,53 +163,86 @@ void Database::search()
         }
     }   
 }
+
 void AddRecord(Database& server)
 {
+    nm:
     cout << "Enter the passenger's first name: ";
  
     string name;
     cin >> name;
- 
-    cout << "Enter the passenger's second name: ";
- 
-    string lastname;
-    cin >> lastname;
-
-    cout << "Enter the flight number (XXX-XXX-XXX) : ";
-
-
-    string flightnum;
-    cin >> flightnum;
-    
-    if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
+    if(find_if(name.begin(), name.end(),(int(*)(int))isdigit) !=name.end())
     {
-        cout << "Enter the date of the flight (DD-MM-YYYY): ";
-
-        string date;
-        cin >> date;
-        if(date.length() == 10 && date[2] == '-' && date[5] == '-')
-        {
-            cout << "Enter the time of the flight (XX:XX): ";
-
-            string time;
-            cin >> time;
-            if(time.length() == 5 && time[2] == ':')
-            {
-                server.addRecord(name,lastname,flightnum,date,time);
-            }
-            else
-            {
-                cout<<"Wrong Data"<<endl;
-            }
-        }
-        else
-        {
-            cout<<"Wrong Data"<<endl;
-        }
+        cout<<"Without numbers plz"<<endl;
+        goto nm;
     }
     else
     {
-        cout<<"Wrong Data"<<endl;
+        goto ln;        
+    }
+    ln:
+    cout << "Enter the passenger's second name: ";
+    
+    string lastname;
+    cin >> lastname;
+    if(find_if(lastname.begin(), lastname.end(),(int(*)(int))isdigit) !=lastname.end())
+    {
+        cout<<"Without numbers plz"<<endl;
+        goto ln;
+    }
+    else
+    {
+        goto other;        
+    }
+    other:
+    bool con = true;
+
+    while(con)
+    {
+        jum1:
+        cout << "Enter the flight number (XXX-XXX-XXX) : ";
+        string flightnum;
+        cin >> flightnum;
+
+        if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
+        {
+            jum2:
+            cout << "Enter the date of the flight (DD-MM-YYYY): ";
+            string date;
+            cin >> date;
+
+            if(date.length() == 10 && date[2] == '-' && date[5] == '-')
+            {
+                jum3:
+                cout << "Enter the time of the flight (XX:XX): ";
+                string time;
+                cin >> time;
+
+            if(time.length() == 5 && time[2] == ':')
+            {
+                server.addRecord(name,lastname,flightnum,date,time);
+                con=false;
+            }
+
+            else
+            {
+                cout<<"Wrong Data"<<endl;
+                goto jum3;
+            }
+            }
+
+            else
+            {
+                cout<<"Wrong Data"<<endl;
+                goto jum2;
+            }
+        }
+
+        else
+        {
+            cout<<"Wrong Data"<<endl;
+            goto jum1;
+        }
     }
 }
 void EditRecord(Database& server)
@@ -221,42 +262,54 @@ void EditRecord(Database& server)
  
     string lastname;
     cin >> lastname;
+    bool con = true;
 
-    cout << "Enter the flight number (XXX-XXX-XXX) : ";
-
-
-    string flightnum;
-    cin >> flightnum;
-    
-    if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
+    while(con)
     {
-        cout << "Enter the date of the flight (DD-MM-YYYY): ";
+        jum1:
+        cout << "Enter the flight number (XXX-XXX-XXX) : ";
+        string flightnum;
+        cin >> flightnum;
 
-        string date;
-        cin >> date;
-        if(date.length() == 10 && date[2] == '-' && date[5] == '-')
+        if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
         {
-            cout << "Enter the time of the flight (XX:XX): ";
+            jum2:
+            cout << "Enter the date of the flight (DD-MM-YYYY): ";
+            string date;
+            cin >> date;
 
-            string time;
-            cin >> time;
+            if(date.length() == 10 && date[2] == '-' && date[5] == '-')
+            {
+                jum3:
+                cout << "Enter the time of the flight (XX:XX): ";
+                string time;
+                cin >> time;
+
             if(time.length() == 5 && time[2] == ':')
             {
                 server.editRecord(id,name,lastname,flightnum,date,time);
+                con=false;
             }
+
             else
             {
                 cout<<"Wrong Data"<<endl;
+                goto jum3;
+            }
+            }
+
+            else
+            {
+                cout<<"Wrong Data"<<endl;
+                goto jum2;
             }
         }
+
         else
         {
             cout<<"Wrong Data"<<endl;
+            goto jum1;
         }
-    }
-    else
-    {
-        cout<<"Wrong Data"<<endl;
     }
 }
  
@@ -278,6 +331,7 @@ void menu(Database& server)
  
     while(!end)
     {
+        mn:
         cout << "----------BD's Menu---------" << endl << endl;
  
         cout << "1. Load the BD file                       *Load, if you already have the BD*" << endl;
@@ -297,10 +351,10 @@ void menu(Database& server)
         cout << "8. Exit" << endl;
  
         cout << "\n\nSelect the function: ";
- 
-        int answer;
-        cin >> answer;
 
+        int answer;
+        if(cin>>answer)
+        {
         switch(answer)
         {
             case 1:
@@ -345,15 +399,18 @@ void menu(Database& server)
                 system("cls");
                 break;
         }
-        
+        }
+        else
+        {
+            server.save();
+            cout<<"Bad DATA"<<endl;
+            break;
+        }
     }
 }
  
 int main()
 {
-    //setlocale(LC_ALL, "Russian");
-    //SetConsoleCP(1251);
-    //SetConsoleOutputCP(1251);
     Database server;
     menu(server);
     return 0;
