@@ -239,76 +239,77 @@ void EditRecord(Database& server)
             cout << "Enter the passenger's first name: ";
             string name;
             cin >> name;
-        
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
             if(find_if(name.begin(), name.end(),(int(*)(int))isdigit) == name.end())
             {
-                lm:
-                cout << "Enter the passengers's last name: ";
-                string lastname;
-                cin >> lastname;
+            lm:
+            cout << "Enter the passengers's last name: ";
+            string lastname;
+            cin >> lastname;
+            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-                if(find_if(lastname.begin(), lastname.end(),(int(*)(int))isdigit) == lastname.end())
+            if(find_if(lastname.begin(), lastname.end(),(int(*)(int))isdigit) == lastname.end())
+            {
+                jum1:
+                cout << "Enter the flight number (XXX-XXX-XXX) : ";
+                string flightnum;
+                cin >> flightnum;
+
+                if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
                 {
-                    jum1:
-                    cout << "Enter the flight number (XXX-XXX-XXX) : ";
-                    string flightnum;
-                    cin >> flightnum;
+                    jum2:
+                    cout << "Enter the date of the flight (DD-MM-YYYY): ";
+                    string date;
+                    cin >> date;
 
-                    if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
+                    if(date.length() == 10 && date[2] == '-' && date[5] == '-' && date[0] >= '0' && date[0] <= '9'&& date[1] >= '0' && date[1] <= '9'&& date[3] >= '0' && date[3] <= '9'&& date[4] >= '0' && date[4] <= '9'&& date[6] >= '0' && date[6] <= '9'&& date[7] >= '0' && date[7] <= '9'&& date[8] >= '0' && date[8] <= '9'&& date[9] >= '0' && date[9] <= '9')
                     {
-                        jum2:
-                        cout << "Enter the date of the flight (DD-MM-YYYY): ";
-                        string date;
-                        cin >> date;
+                        jum3:
+                        cout << "Enter the time of the flight (XX:XX): ";
+                        string time;
+                        cin >> time;
 
-                        if(date.length() == 10 && date[2] == '-' && date[5] == '-')
+                        if(time.length() == 5 && time[0] >= '0' && time[0] <= '9'&& time[1] >= '0' && time[1] <= '9' && time[2] == ':' && time[3] >= '0' && time[3] <= '9'&& time[4] >= '0' && time[4] <= '9')
                         {
-                            jum3:
-                            cout << "Enter the time of the flight (XX:XX): ";
-                            string time;
-                            cin >> time;
-
-                            if(time.length() == 5 && time[2] == ':')
-                            {
-                                server.editRecord(id,name,lastname,flightnum,date,time);
-                                server.save();
-                                con=false;
-                            }
-
-                            else
-                            {
-                            cout<<"Wrong data format"<<endl;
-                            goto jum3;
-                            }
+                            server.editRecord(id,name,lastname,flightnum,date,time);
+                            server.save();
+                            con=false;
                         }
 
                         else
                         {
-                            cout<<"Wrong data format"<<endl;
-                            goto jum2;
+                        cout<<"Wrong data format"<<endl;
+                        goto jum3;
                         }
                     }
 
                     else
                     {
                         cout<<"Wrong data format"<<endl;
-                        goto jum1;
+                        goto jum2;
                     }
                 }
-    
+
                 else
                 {
-                    cout<<"Enter the last name without numbers !"<<endl;
-                    goto lm;
+                    cout<<"Wrong data format"<<endl;
+                    goto jum1;
                 }
             }
-
+    
             else
             {
-                cout<<"Enter the first name without numbers !"<<endl;
-                goto nm;
+                cout<<"Enter the last name without numbers !"<<endl;
+                goto lm;
             }
         }
+
+        else
+        {
+            cout<<"Enter the first name without numbers !"<<endl;
+            goto nm;
+        }
+    }
     }
     else
     {
