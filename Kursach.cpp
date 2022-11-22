@@ -65,11 +65,12 @@ void  Database::save()
     for(int i=0; i < count; ++i)
     {
         if(getNameById(i) != delete_flag && getLastNameById(i) != delete_flag && getFlightNumById(i) != delete_flag && getDateById(i) != delete_flag && getTimeById(i) != delete_flag)
+        {
             output << getNameById(i) << " " << getLastNameById(i) << " " << getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << endl;
+        }
     }
  
     output.close();
- 
 }
  
 void  Database::load()
@@ -102,7 +103,6 @@ void  Database::load()
     }
  
     input.close();
- 
 }
  
 void Database::printDatabase()
@@ -118,6 +118,7 @@ void Database::search()
     string data;
     cout <<"Enter the some data from the ticket: ";
     cin >> data;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     for(int i=0; i < count; ++i)
     {
         if ((data == getNameById(i)) || (data == getLastNameById(i)) || (data == getFlightNumById(i)) || (data == getDateById(i)) || (data == getTimeById(i)))
@@ -136,14 +137,14 @@ void AddRecord(Database& server)
         cout << "Enter the passenger's first name: ";
         string name;
         cin >> name;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if(find_if(name.begin(), name.end(),(int(*)(int))isdigit) == name.end())
         {
             lm:
             cout << "Enter the passengers's last name: ";
             string lastname;
             cin >> lastname;
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
             if(find_if(lastname.begin(), lastname.end(),(int(*)(int))isdigit) == lastname.end())
             {
@@ -151,6 +152,7 @@ void AddRecord(Database& server)
                 cout << "Enter the flight number (XXX-XXX-XXX) : ";
                 string flightnum;
                 cin >> flightnum;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                 if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
                 {
@@ -158,6 +160,7 @@ void AddRecord(Database& server)
                     cout << "Enter the date of the flight (DD-MM-YYYY): ";
                     string date;
                     cin >> date;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                     if(date.length() == 10 && date[2] == '-' && date[5] == '-' && date[0] >= '0' && date[0] <= '9'&& date[1] >= '0' && date[1] <= '9'&& date[3] >= '0' && date[3] <= '9'&& date[4] >= '0' && date[4] <= '9'&& date[6] >= '0' && date[6] <= '9'&& date[7] >= '0' && date[7] <= '9'&& date[8] >= '0' && date[8] <= '9'&& date[9] >= '0' && date[9] <= '9')
                     {
@@ -165,6 +168,7 @@ void AddRecord(Database& server)
                         cout << "Enter the time of the flight (XX:XX): ";
                         string time;
                         cin >> time;
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
                         if(time.length() == 5 && time[0] >= '0' && time[0] <= '9'&& time[1] >= '0' && time[1] <= '9' && time[2] == ':' && time[3] >= '0' && time[3] <= '9'&& time[4] >= '0' && time[4] <= '9')
                         {
@@ -175,8 +179,8 @@ void AddRecord(Database& server)
 
                         else
                         {
-                        cout<<"Wrong data format"<<endl;
-                        goto jum3;
+                            cout<<"Wrong data format"<<endl;
+                            goto jum3;
                         }
                     }
 
@@ -208,12 +212,14 @@ void AddRecord(Database& server)
         }
     }
 }
+
 void EditRecord(Database& server)
 {
     idi:
     cout << "Enter the passenger's ID: ";
     int id;
     cin >> id;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     if(!cin)
     {
         cin.clear();
@@ -239,77 +245,80 @@ void EditRecord(Database& server)
             cout << "Enter the passenger's first name: ";
             string name;
             cin >> name;
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');
             if(find_if(name.begin(), name.end(),(int(*)(int))isdigit) == name.end())
             {
-            lm:
-            cout << "Enter the passengers's last name: ";
-            string lastname;
-            cin >> lastname;
-            cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+                lm:
+                cout << "Enter the passengers's last name: ";
+                string lastname;
+                cin >> lastname;
+                cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-            if(find_if(lastname.begin(), lastname.end(),(int(*)(int))isdigit) == lastname.end())
-            {
-                jum1:
-                cout << "Enter the flight number (XXX-XXX-XXX) : ";
-                string flightnum;
-                cin >> flightnum;
-
-                if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
+                if(find_if(lastname.begin(), lastname.end(),(int(*)(int))isdigit) == lastname.end())
                 {
-                    jum2:
-                    cout << "Enter the date of the flight (DD-MM-YYYY): ";
-                    string date;
-                    cin >> date;
+                    jum1:
+                    cout << "Enter the flight number (XXX-XXX-XXX) : ";
+                    string flightnum;
+                    cin >> flightnum;
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                    if(date.length() == 10 && date[2] == '-' && date[5] == '-' && date[0] >= '0' && date[0] <= '9'&& date[1] >= '0' && date[1] <= '9'&& date[3] >= '0' && date[3] <= '9'&& date[4] >= '0' && date[4] <= '9'&& date[6] >= '0' && date[6] <= '9'&& date[7] >= '0' && date[7] <= '9'&& date[8] >= '0' && date[8] <= '9'&& date[9] >= '0' && date[9] <= '9')
+                    if(flightnum.length() == 11 && flightnum[3] == '-' && flightnum[7] == '-')
                     {
-                        jum3:
-                        cout << "Enter the time of the flight (XX:XX): ";
-                        string time;
-                        cin >> time;
+                        jum2:
+                        cout << "Enter the date of the flight (DD-MM-YYYY): ";
+                        string date;
+                        cin >> date;
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
 
-                        if(time.length() == 5 && time[0] >= '0' && time[0] <= '9'&& time[1] >= '0' && time[1] <= '9' && time[2] == ':' && time[3] >= '0' && time[3] <= '9'&& time[4] >= '0' && time[4] <= '9')
+                        if(date.length() == 10 && date[2] == '-' && date[5] == '-' && date[0] >= '0' && date[0] <= '9'&& date[1] >= '0' && date[1] <= '9'&& date[3] >= '0' && date[3] <= '9'&& date[4] >= '0' && date[4] <= '9'&& date[6] >= '0' && date[6] <= '9'&& date[7] >= '0' && date[7] <= '9'&& date[8] >= '0' && date[8] <= '9'&& date[9] >= '0' && date[9] <= '9')
                         {
-                            server.editRecord(id,name,lastname,flightnum,date,time);
-                            server.save();
-                            con=false;
+                            jum3:
+                            cout << "Enter the time of the flight (XX:XX): ";
+                            string time;
+                            cin >> time;
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+                            if(time.length() == 5 && time[0] >= '0' && time[0] <= '9'&& time[1] >= '0' && time[1] <= '9' && time[2] == ':' && time[3] >= '0' && time[3] <= '9'&& time[4] >= '0' && time[4] <= '9')
+                            {
+                                server.editRecord(id,name,lastname,flightnum,date,time);
+                                server.save();
+                                con=false;
+                            }
+
+                            else
+                            {
+                                cout<<"Wrong data format"<<endl;
+                                goto jum3;
+                            }
                         }
 
                         else
                         {
-                        cout<<"Wrong data format"<<endl;
-                        goto jum3;
+                            cout<<"Wrong data format"<<endl;
+                            goto jum2;
                         }
                     }
 
                     else
                     {
                         cout<<"Wrong data format"<<endl;
-                        goto jum2;
+                        goto jum1;
                     }
                 }
-
+    
                 else
                 {
-                    cout<<"Wrong data format"<<endl;
-                    goto jum1;
+                    cout<<"Enter the last name without numbers !"<<endl;
+                    goto lm;
                 }
             }
-    
+
             else
             {
-                cout<<"Enter the last name without numbers !"<<endl;
-                goto lm;
+                cout<<"Enter the first name without numbers !"<<endl;
+                goto nm;
             }
         }
-
-        else
-        {
-            cout<<"Enter the first name without numbers !"<<endl;
-            goto nm;
-        }
-    }
     }
     else
     {
@@ -324,6 +333,7 @@ void DeleteRecord(Database& server)
     cout << "Enter the ID of the ticket: ";
     int id;
     cin >> id;
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
     if(!cin)
     {
         cin.clear();
@@ -346,6 +356,7 @@ void DeleteRecord(Database& server)
         server.editRecord(id,delete_flag, delete_flag, delete_flag, delete_flag, delete_flag);
         server.save();
     }
+    
     else
     {
         cout<<"Incorrect ID"<<endl;
@@ -356,6 +367,7 @@ void DeleteRecord(Database& server)
  
 void menu(Database& server)
 {
+    server.load();
     mn:
     bool end = false;
  
@@ -363,27 +375,27 @@ void menu(Database& server)
     {
         cout << "----------BD's Menu---------" << endl << endl;
  
-        cout << "1. Load the BD file                       *Load, if you already have the BD*" << endl;
+        //cout << "1. Load the BD file                       *Load, if you already have the BD*" << endl;
  
-        cout << "2. Record the new data" << endl;
+        cout << "1. Record the new data" << endl;
  
-        cout << "3. Delete the data" << endl;
+        cout << "2. Delete the data" << endl;
 
-        cout << "4. Edit the ticket's data" << endl;
+        cout << "3. Edit the ticket's data" << endl;
  
-        cout << "5. Show all tickets" << endl;
+        cout << "4. Show all tickets" << endl;
 
-        cout << "6. Search for matches in the DB" << endl;
+        cout << "5. Search for matches in the DB" << endl;
 
         //cout << "7. Save & Exit" << endl;
 
-        cout << "7. Exit" << endl;
+        cout << "6. Exit" << endl;
  
         cout << "\n\nSelect the function: ";
 
         int answer;
         cin>>answer;
-
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
         if(!cin)
         {
             cin.clear();
@@ -396,32 +408,32 @@ void menu(Database& server)
 
         switch(answer)
         {
-            case 1:
+            /*case 1:
                 server.load();
                 cout<<"Data was loaded"<<endl;
                 system("pause");
                 system("cls");
-                break;
-            case 2:
+                break;*/
+            case 1:
                 AddRecord(server);
                 system("pause");
                 system("cls");
                 break;
-            case 3:
+            case 2:
                 DeleteRecord(server);
                 system("pause");
                 system("cls");
                 break;
-            case 4:
+            case 3:
                 EditRecord(server);
                 system("cls");
                 break;
-            case 5:
+            case 4:
                 server.printDatabase();
                 system("pause");
                 system("cls");
                 break;
-            case 6:
+            case 5:
                 server.search();
                 system("pause");
                 system("cls");
@@ -430,7 +442,7 @@ void menu(Database& server)
                 server.save();
                 end = true;
                 break;*/
-            case 7:
+            case 6:
                 end = true;
                 break;
             default:
