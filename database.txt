@@ -1,7 +1,7 @@
-Andrey Shimov FCG-123-243 12-15-2022 18:52
-Alex Fomin FJC-152-GHC 18-12-2022 19:40
-Mona Megistus MND-365-PLZ 15-04-2022 20:30
-Diluc Regnovinder MND-365-PLZ 18-08-2023 20:30
-Jean Megistus KJR-536-CSK 20-05-2023 15:45
-Mona Favonius CBE-945-KLE 19-01-2023 19:30
-Roman Ablyazov GCV-351-DCK 17-10-2023 19:25
+Valeriy Modniy FCD-341-CDR 15-04-2022 18:00 Moscow
+Max Fronter CKE-053-VLS 18-02-2022 19:00 Berlin
+Anton Dolence JGE-102-GJD 11-03-2022 15:00 Paris
+Oleg Paltsev GFR-452-VDE 18-04-2022 14:30 Moscow
+Alexey Motorin GRG-352-DDE 18-04-2022 14:30 Moscow
+Elon Musk FDS-024-JGE 11-03-2022 17:30 Paris
+Roman Ablyazov GFR-353-DGE 15-04-2022 15:00 Saratov

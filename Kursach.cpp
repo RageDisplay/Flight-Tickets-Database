@@ -1,12 +1,13 @@
 #include "Kursach.h"
 
-void  Database::editRecord(int id, string name, string lastname, string flightnum, string date, string time)
+void  Database::editRecord(int id, string name, string lastname, string flightnum, string date, string time, string location)
 {
     this->name[id] = name;
     this->lastname[id] = lastname;
     this->flightnum[id] = flightnum;
     this->date[id]=date;
     this->time[id]=time;
+    this->location[id]=location;
 }
 
 int Database::getCount()
@@ -14,13 +15,14 @@ int Database::getCount()
     return count;
 }
  
-void Database::addRecord(string name, string lastname, string flightnum, string date, string time)
+void Database::addRecord(string name, string lastname, string flightnum, string date, string time, string location)
 {
     this->name[count] = name;
     this->lastname[count] = lastname;
     this->flightnum[count] = flightnum;
     this->date[count] = date;
     this->time[count]=time;
+    this->location[count]=location;
     ++count;
 }
  
@@ -46,6 +48,10 @@ string Database::getTimeById(int id)
 {
     return time[id];
 }
+string Database::getLocationById(int id)
+{
+    return location[id];
+}
 
 void  Database::save()
 {
@@ -64,9 +70,9 @@ void  Database::save()
  
     for(int i=0; i < count; ++i)
     {
-        if(getNameById(i) != delete_flag && getLastNameById(i) != delete_flag && getFlightNumById(i) != delete_flag && getDateById(i) != delete_flag && getTimeById(i) != delete_flag)
+        if(getNameById(i) != delete_flag && getLastNameById(i) != delete_flag && getFlightNumById(i) != delete_flag && getDateById(i) != delete_flag && getTimeById(i) != delete_flag && getLocationById(i) != delete_flag)
         {
-            output << getNameById(i) << " " << getLastNameById(i) << " " << getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << endl;
+            output << getNameById(i) << " " << getLastNameById(i) << " " << getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << " " << getLocationById(i) << endl;
         }
     }
  
@@ -95,10 +101,12 @@ void  Database::load()
         input >> date;
         string time;
         input >> time;
+        string location;
+        input >> location;
 
         if(name != "")
         {
-            addRecord(name,lastname,flightnum,date,time);
+            addRecord(name,lastname,flightnum,date,time,location);
         }
     }
  
@@ -109,7 +117,7 @@ void Database::printDatabase()
 {
     for(int i=0; i < count; ++i)
     {
-        cout << i << "." << getNameById(i) << " " << getLastNameById(i) << " "<< getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << endl;
+        cout << i << "." << getNameById(i) << " " << getLastNameById(i) << " "<< getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << " " << getLocationById(i) << endl;
     }
 }
 
@@ -121,9 +129,9 @@ void Database::search()
     cin.ignore(numeric_limits<streamsize>::max(), '\n');
     for(int i=0; i < count; ++i)
     {
-        if ((data == getNameById(i)) || (data == getLastNameById(i)) || (data == getFlightNumById(i)) || (data == getDateById(i)) || (data == getTimeById(i)))
+        if ((data == getNameById(i)) || (data == getLastNameById(i)) || (data == getFlightNumById(i)) || (data == getDateById(i)) || (data == getTimeById(i)) || (data == getLocationById(i)))
         {
-            cout << i << "." << getNameById(i) << " " << getLastNameById(i) << " "<< getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << endl;
+            cout << i << "." << getNameById(i) << " " << getLastNameById(i) << " "<< getFlightNumById(i) << " " << getDateById(i) << " " << getTimeById(i) << " " << getLocationById(i) << endl;
         }
     }   
 }
@@ -172,9 +180,23 @@ void AddRecord(Database& server)
 
                         if(time.length() == 5 && time[0] >= '0' && time[0] <= '9'&& time[1] >= '0' && time[1] <= '9' && time[2] == ':' && time[3] >= '0' && time[3] <= '9'&& time[4] >= '0' && time[4] <= '9')
                         {
-                            server.addRecord(name,lastname,flightnum,date,time);
-                            server.save();
-                            con=false;
+                            loc:
+                            cout << "Enter the location: ";
+                            string location;
+                            cin >> location;
+                            cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                            if(find_if(location.begin(), location.end(),(int(*)(int))isdigit) == location.end())
+                            {
+                                server.addRecord(name,lastname,flightnum,date,time,location);
+                                server.save();
+                                con=false;
+                            }
+
+                            else
+                            {
+                                cout<<"Enter the location without numbers !"<<endl;;
+                                goto loc;
+                            }
                         }
 
                         else
@@ -280,11 +302,24 @@ void EditRecord(Database& server)
 
                             if(time.length() == 5 && time[0] >= '0' && time[0] <= '9'&& time[1] >= '0' && time[1] <= '9' && time[2] == ':' && time[3] >= '0' && time[3] <= '9'&& time[4] >= '0' && time[4] <= '9')
                             {
-                                server.editRecord(id,name,lastname,flightnum,date,time);
-                                server.save();
-                                con=false;
-                            }
+                                loc:
+                                cout << "Enter the location: ";
+                                string location;
+                                cin >> location;
+                                cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                                if(find_if(location.begin(), location.end(),(int(*)(int))isdigit) == location.end())
+                                {
+                                    server.editRecord(id,name,lastname,flightnum,date,time,location);
+                                    server.save();
+                                    con=false;
+                                }
 
+                                else
+                                {
+                                    cout<<"Enter the location without numbers !"<<endl;
+                                    goto loc;
+                                }
+                            }
                             else
                             {
                                 cout<<"Wrong data format"<<endl;
@@ -353,7 +388,7 @@ void DeleteRecord(Database& server)
     if(id > -1 && id < numline)
     {
         string delete_flag = "%delete";
-        server.editRecord(id,delete_flag, delete_flag, delete_flag, delete_flag, delete_flag);
+        server.editRecord(id,delete_flag, delete_flag, delete_flag, delete_flag, delete_flag, delete_flag);
         server.save();
     }
     
@@ -364,7 +399,51 @@ void DeleteRecord(Database& server)
     }
 
 }
- 
+
+void Database::sortedByDate()
+{
+    vector<list> flightlist;
+    wfstream myfile("database.txt",ios::in);
+    if(!myfile.is_open())
+    {
+        cerr << "Error open database.txt" << endl;
+        exit(1);
+    }
+
+    while (!myfile.eof())
+    {
+        list flist;
+        myfile>>flist.skip1>>flist.skip2>>flist.skip3;
+        getline(myfile,flist.needata);
+        flightlist.push_back(flist);
+    }
+    sort(flightlist.begin(), flightlist.end(),[](const list& lhs, const list& rhs)->bool{return lhs.needata < rhs.needata;});
+    for_each(flightlist.begin(), flightlist.end(), [](const list& f){wcout<<f.skip1 << " " << f.skip2 << " " << f.skip3<< f.needata<<"\n";});
+    myfile.close();
+} 
+
+void Database::sortedByLocation()
+{
+    vector<list> loclist;
+    wfstream myfile("database.txt",ios::in);
+    if(!myfile.is_open())
+    {
+        cerr << "Error open database.txt" << endl;
+        exit(1);
+    }
+
+    while (!myfile.eof())
+    {
+        list llist;
+        myfile>>llist.skip1>>llist.skip2>>llist.skip3>>llist.skip4>>llist.skip5;
+        getline(myfile,llist.needata);
+        loclist.push_back(llist);
+    }
+    sort(loclist.begin(), loclist.end(),[](const list& lhs, const list& rhs)->bool{return lhs.needata < rhs.needata;});
+    for_each(loclist.begin(), loclist.end(), [](const list& f){wcout<<f.skip1 << " " << f.skip2 << " " << f.skip3 << f.skip4 << " " << f.skip5 << " " << f.needata<<"\n";});
+    myfile.close();
+}
+
 void menu(Database& server)
 {
     server.load();
@@ -375,8 +454,6 @@ void menu(Database& server)
     {
         cout << "----------BD's Menu---------" << endl << endl;
  
-        //cout << "1. Load the BD file                       *Load, if you already have the BD*" << endl;
- 
         cout << "1. Record the new data" << endl;
  
         cout << "2. Delete the data" << endl;
@@ -385,11 +462,14 @@ void menu(Database& server)
  
         cout << "4. Show all tickets" << endl;
 
-        cout << "5. Search for matches in the DB" << endl;
+        cout << "5. Show sorted base by date" << endl;
 
-        //cout << "7. Save & Exit" << endl;
+        cout << "6. Show sorted base by location" << endl;
 
-        cout << "6. Exit" << endl;
+        cout << "7. Search for matches in the DB" << endl;
+
+        cout << "8. Exit" << endl;
+
  
         cout << "\n\nSelect the function: ";
 
@@ -408,12 +488,6 @@ void menu(Database& server)
 
         switch(answer)
         {
-            /*case 1:
-                server.load();
-                cout<<"Data was loaded"<<endl;
-                system("pause");
-                system("cls");
-                break;*/
             case 1:
                 AddRecord(server);
                 system("pause");
@@ -433,17 +507,23 @@ void menu(Database& server)
                 system("pause");
                 system("cls");
                 break;
-            case 5:
+            case 7:
                 server.search();
                 system("pause");
                 system("cls");
                 break;
-            /*case 7:
-                server.save();
+            case 8:
                 end = true;
-                break;*/
+                break;
+            case 5:
+                server.sortedByDate();
+                system("pause");
+                system("cls");
+                break;
             case 6:
-                end = true;
+                server.sortedByLocation();
+                system("pause");
+                system("cls");
                 break;
             default:
                 cout << "Wrong num " << endl;
